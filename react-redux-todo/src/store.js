@@ -1,20 +1,20 @@
 import { createStore } from 'redux';
-import { createAction } from '@reduxjs/toolkit';
+import { createAction, createReducer } from '@reduxjs/toolkit';
 
 const addToDo = createAction('ADD'); // composed of type, payload (it is an convention)
 const deleteToDo = createAction('DELETE');
 
 // enhancement : use local storage to save state on the browser
-const reducer = (state = [], action) => {
-  switch (action.type) {
-    case addToDo.type:
-      return [{ text: action.payload, id: Date.now() }, ...state];
-    case deleteToDo.type:
-      return state.filter((toDo) => toDo.id !== action.payload);
-    default:
-      return state;
-  }
-};
+// using create reducer in redux toolkit, we "can mutate" the state
+// and also can "return new state"
+const reducer = createReducer([], {
+  [addToDo]: (state, action) => {
+    // no return : related to immer
+    state.push({ text: action.payload, id: Date.now() }); // push doesn't return state, just mutating.
+  },
+  [deleteToDo]: (state, action) =>
+    state.filter((toDo) => toDo.id !== action.payload), // filter is returning state(new array).
+});
 
 const store = createStore(reducer);
 
