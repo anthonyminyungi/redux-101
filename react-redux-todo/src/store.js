@@ -22,6 +22,7 @@ import {
 // });
 
 const toDos = createSlice({
+  // create Slice
   name: 'toDosReducer',
   initialState: [],
   reducers: {
